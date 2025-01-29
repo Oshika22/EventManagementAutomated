@@ -62,22 +62,23 @@ export const EventList = () => {
        </div>
      </div>
     {/* Display the events created by the user */}
-      <div className="flex justify-center space-x-10">
+      <div className="flex flex-wrap justify-center gap-4">
         {events.length > 0 ? (
           events.map((event, index) => (
-            <EventCard key={index} event={event} />
+            <EventCard key={index} event={event} className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4" />
           ))
         ) : (
           <p>No events found</p>
         )}
-      </div>
-      {/* Add Event Card */}
+{/* Add Event Card */}
       <div
-        className="w-48 h-60 bg-gradient-to-b from-[#c1310d] to-[#ff9933] rounded-lg p-4 flex items-center justify-center text-white cursor-pointer"
+        className="w-48 h-60 bg-gradient-to-b from-[#c1310d] to-[#ff9933] rounded-lg p-4 flex items-center justify-center flex-wrap text-white cursor-pointer"
         onClick={() => alert('Add Event')}
       >
         <h3 className="text-lg font-semibold">Add Event</h3>
       </div>
+      </div>
+
     </div>
   );
 };
