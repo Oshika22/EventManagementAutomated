@@ -45,7 +45,7 @@ export const FileUpload = () =>  {
   };
 
   return (
-    <div className="App">
+    <div className="file-upload text-black"> 
       <h1>Upload Excel File</h1>
       <input type="text" onChange={handleNameChange}/>
       <select onChange={handleTypeChange}>
