@@ -1,7 +1,16 @@
 // In EventList.jsx
 import React, { useEffect, useState } from 'react';
 import EventCard from './EventCard';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faCalendarPlus } from "@fortawesome/free-solid-svg-icons";
 // import AddEvent from './AddEvent';
+
+import { EventCategories } from './EventCategories';
+
+
+// // import { EventCategories } from './EventCategories';
+
 
 import { useNavigate } from "react-router-dom";
 export const EventList = () => {
@@ -10,64 +19,52 @@ export const EventList = () => {
   const navigate = useNavigate();
   // const [isAddEventVisible, setIsAddEventVisible] = useState(false);
   //toggle between Startup and Hackathon
-  const toggleOption = () => {
-    setSelectedOption((prevOption) => (prevOption === 'Startup' ? 'Hackathon' : 'Startup'));
-  };
+  // const toggleOption = () => {
+  //   setSelectedOption((prevOption) => (prevOption === 'Startup' ? 'Hackathon' : 'Startup'));
+  // };
 
 // Fetch events from the server
-  useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const response = await fetch('http://localhost:5000/api/events');
-        if (response.ok) {
-          const data = await response.json();
-          setEvents(data);
-        } else {
-          console.error('Error fetching events:', response.status);
-        }
-      } catch (error) {
-        console.error('Error fetching events:', error);
+useEffect(() => {
+  const fetchEvents = async () => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/eventList/${selectedOption}`);
+      if (response.ok) {
+        const data = await response.json();
+        setEvents(data);
+      } else {
+        console.error('Error fetching events:', response.status);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching events:', error);
+    }
+  };
 
-    fetchEvents();
-  }, []);
+  fetchEvents();
+}, [selectedOption]);
 
   return (
-    <div className="text-center py-6 bg-black">
+    <div className="text-center py-6 text-black">
+      {/* <EventCategories/> */}
       {/* {isAddEventVisible && <AddEvent />} */}
      {/* Events Title */}
-     <h1 className="text-[#ff9900] text-xl mb-4">Events</h1>
+     <h1 className="font-bold font-serif bg-gradient-to-r from-yellow-500 via-orange-500 to-red-500 bg-clip-text text-transparent text-7xl mb-4">Events</h1>
  
-      {/* Sliding Toggle Switch */}
-      <div className="relative w-40 h-12 bg-gray-300 rounded-lg mx-auto mb-6">
-        {/* Slider */}
-        <div
-          className={`absolute top-0 left-0 w-1/2 h-full rounded-lg transition-transform duration-300 ${
-            selectedOption === 'Startup' ? 'bg-[#ff9900] translate-x-0' : 'bg-[#ff9900] translate-x-full'
-          }`}
-        ></div>
- 
-        {/* Startup Label */}
-        <div
-          className={`absolute top-0 left-0 w-1/2 h-full flex items-center justify-center text-sm font-medium cursor-pointer ${
-            selectedOption === 'Startup' ? 'text-black bg-[#ff9900]' : 'text-gray-700 bg-gray-950'
-          }`}
-          onClick={() => setSelectedOption('Startup')}
-        >
-          Startup
-        </div>
- 
-        {/* Hackathon Label */}
-        <div
-          className={`absolute top-0 right-0 w-1/2 h-full flex items-center justify-center text-sm font-medium cursor-pointer ${
-            selectedOption === 'Hackathon' ? 'text-black bg-[#ff9900]' : 'text-gray-700 bg-gray-950'
-          }`}
-          onClick={() => setSelectedOption('Hackathon')}
-        >
-         Hackathon
-       </div>
-     </div>
+      {/* Event Category Buttons */}
+      <div className="flex justify-center space-x-4 mb-6">
+        {["Startup", "Hackathon", "Conference", "Registered Startups"].map((category) => (
+          <button
+            key={category}
+            className={`px-4 py-2 rounded-lg font-medium border transition-all duration-300 shadow-lg ${
+              selectedOption === category ? " bg-[#ff8800] text-white border-[#ff9900]"  // Active button"
+              : "text-[#ff9900] border-[#ff9900] hover:bg-[#ff8800] hover:text-white" // Inactive button
+            }`}
+            onClick={() => setSelectedOption(category)}
+          >
+        {category}
+      </button>
+    ))}
+  </div>
+
     {/* Display the events created by the user */}
       <div className="flex flex-wrap justify-center gap-4">
         {events.length > 0 ? (
@@ -79,11 +76,13 @@ export const EventList = () => {
         )}
 {/* Add Event Card */}
       <div
-        className="w-48 h-60 bg-gradient-to-b from-[#c1310d] to-[#ff9933] rounded-lg p-4 flex items-center justify-center flex-wrap text-white cursor-pointer"
+        className="w-48 h-60 shadow-lg bg-gradient-to-b from-[#ff6a00] to-[#ff9c33] rounded-lg p-4 flex flex-col items-center justify-center flex-wrap text-white cursor-pointer hover:scale-105 transition-transform duration-300 ease-in-out"
         onClick={() => navigate("/add-event")}
       >
+        <FontAwesomeIcon icon={faCalendarPlus} className='text-4xl m-2'/>
         <h3 className="text-lg font-semibold">Add Event</h3>
       </div>
+
       </div>
 
     </div>
